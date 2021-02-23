@@ -1,6 +1,9 @@
 import { ethers } from "hardhat";
 
+const Web3 = require('web3');
 async function main() {
+  // WEB3 CONFIG
+  Web3.eth.accounts.wallet.add(process.env.PRIVATE_KEY);
   const factory = await ethers.getContractFactory("Counter");
 
   // If we had constructor arguments, they would be passed into deploy()
