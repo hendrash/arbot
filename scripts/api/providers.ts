@@ -1,6 +1,6 @@
 // const Web3 = require('web3');
 // const abs = require('./utils/addresses');
-import {ExchangeTypes} from "./tokenModels"
+import {ExchangeTypes} from "../models/tokenModels"
 // const abis = require("./abis");
 // const abi = require("./utils/abis");
 const DEXAG = require('dexag-sdk');

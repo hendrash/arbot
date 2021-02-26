@@ -1,6 +1,6 @@
 import { ethers } from "hardhat";
 import { ExchangesTokensTypes } from "./models/tokenModels";
-import { Service } from "./service";
+import { Service } from "./service/service";
 
 
 
@@ -22,7 +22,7 @@ async function main() {
   console.log(contract.deployTransaction.hash);
  
   console.log("printing....")
-  service.checkArb(ExchangesTokensTypes.WETH,ExchangesTokensTypes.DAI,1000)
+  await service.checkArb(ExchangesTokensTypes.WETH,ExchangesTokensTypes.DAI,1000)
 
   // The contract is NOT deployed yet; we must wait until it is mined
   await contract.deployed();
