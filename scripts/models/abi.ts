@@ -1,4 +1,4 @@
-export const abis = {
+export const Abis = {
     TRADER_ABI: [
       {
         constant: false,
