@@ -1,0 +1,13 @@
+{
+    "configurations": [
+      {
+            "type": "pwa-node",
+            "name": "hardhat debugger",
+            "request": "launch",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": ["run-script", "run"],
+            "envFile": "${workspaceFolder}/.env"
+            
+        }
+    ]
+}
