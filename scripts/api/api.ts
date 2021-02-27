@@ -1,4 +1,4 @@
-import { ExchangesTokensTypes, ExchangeTokenList } from "../models/tokenModels"
+import { ExchangesTokensTypes, ExchangeTokenList, TokenSymbols } from "../models/tokenModels"
 import { ToWei } from "../util/utils"
 import {web3} from "hardhat"
 
@@ -16,17 +16,17 @@ export class Api{
       
             web3.eth.accounts.wallet.add(process.env.PRIVATE_KEY as string)
     }
-    async getDexAg(inputTokenSymbol: ExchangesTokensTypes,outputTokenSymbol:ExchangesTokensTypes, inputAmount: number){
+    async getDexAg(tokenSymbol:TokenSymbols){
         return await DexAg.getPrice({
-            to:outputTokenSymbol,
-            from:inputTokenSymbol,
-            fromAmount: inputAmount , 
+            to:tokenSymbol.outputTokenSymbol,
+            from:tokenSymbol.inputTokenSymbol,
+            fromAmount: tokenSymbol.inputAmount , 
             dex: 'all'
         })
         
     }
-    async getParaSwap(inputTokenSymbol: ExchangesTokensTypes, outputTokenSymbol: ExchangesTokensTypes, inputAmount: number):Promise<OptimalRatesWithPartnerFees> {
-       const paraswap = await this.paraswap.getRate(inputTokenSymbol, outputTokenSymbol, inputAmount+"");
+    async getParaSwap(tokenSymbol:TokenSymbols):Promise<OptimalRatesWithPartnerFees> {
+       const paraswap = await this.paraswap.getRate(tokenSymbol.inputTokenSymbol, tokenSymbol.outputTokenSymbol, tokenSymbol.inputAmount+"");
        if(paraswap as OptimalRatesWithPartnerFees ){
         return paraswap as OptimalRatesWithPartnerFees;   
        } 

@@ -1,7 +1,9 @@
-import { ExchangesTokensTypes } from "../models/tokenModels";
+import { ExchangesTokensTypes, TokenSymbols } from "../models/tokenModels";
+import { SaleService } from "../service/saleService";
 
 export class InvokeSell{
-    async searchForSell(inputTokenSymbol: ExchangesTokensTypes, outputTokenSymbol: ExchangesTokensTypes, inputAmount:number){
-
+    service= new SaleService();
+    async searchForSellParaSwap(inputTokenSymbol: ExchangesTokensTypes, outputTokenSymbol:ExchangesTokensTypes, inputAmount: number){
+        await Promise.resolve(this.service.paraSwapCheckProfit({inputTokenSymbol, outputTokenSymbol, inputAmount}))
     }
 }

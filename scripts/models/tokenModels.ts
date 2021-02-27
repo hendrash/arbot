@@ -39,3 +39,9 @@ export const GAS_LIMIT = process.env.GAS_LIMIT;
 export const ESTIMATED_GAS = process.env.ESTIMATED_GAS;
 export const TEST_MODE = true;
 export const TEST_CCONTRACT = "TradingBot"
+
+export type TokenSymbols={
+    inputTokenSymbol: ExchangesTokensTypes,
+    outputTokenSymbol: ExchangesTokensTypes,
+    inputAmount: number
+}
