@@ -1,6 +1,6 @@
 import { ethers } from "hardhat";
+import { Invoke } from "./invoke/invoke";
 import { ExchangesTokensTypes } from "./models/tokenModels";
-import { Service } from "./service/service";
 
 
 
@@ -12,7 +12,7 @@ async function main() {
   // If we had constructor arguments, they would be passed into deploy()
   let contract = await factory.deploy();
 
-  let service= new Service()
+  let service= new Invoke()
 
 
   // The address the Contract WILL have once mined

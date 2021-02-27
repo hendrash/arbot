@@ -1,24 +1,21 @@
-import { Agregators } from "../agregators/agregators";
 import { Api } from "../api/api";
-import { ExchangesTokensTypes, ExchangeTokenList } from "../models/tokenModels";
+import { ExchangesTokensTypes } from "../models/tokenModels";
+// const { web3, ethers } = require("hardhat");
+const DEXAG = require('dexag-sdk');
 
 export class Service{
-    agregators: any;
-constructor(){
-     this.agregators = new Agregators();
-}
-    async checkArb(inputTokenSymbol: ExchangesTokensTypes, outputTokenSymbol:ExchangesTokensTypes, inputAmount: number){
-    //WEB3 CONFIG
-
-  await Promise.all([this.agregators.getDexAg(inputTokenSymbol, outputTokenSymbol,inputAmount)])
-    // const inputAmt = toWei(inputAmount.toString(), inputToken)
+    private api = new Api();
+    constructor(){
     }
-    // async runSplit(){
-    //     ONESPLIT_DISABLE_FLAGS.map(async flag=>(await this.api.fetchOneSplitData({
-            
-    //     }))
-
-    //     )
-    // }
-    
+    async getDexAg(inputTokenSymbol: ExchangesTokensTypes,outputTokenSymbol:ExchangesTokensTypes, inputAmount: number){
+       const dexAg = await this.api.getDexAg(inputTokenSymbol, outputTokenSymbol, inputAmount)
+       console.log(dexAg)
+       console.log("\n")
+       return dexAg;
+    }
+    async getParaSwap(inputTokenSymbol: ExchangesTokensTypes,outputTokenSymbol:ExchangesTokensTypes, inputAmount: number){
+        const paraSwap = await this.api.getParaSwap(inputTokenSymbol, outputTokenSymbol, inputAmount);
+        console.log(paraSwap)
+        return paraSwap;
+    }
 }
