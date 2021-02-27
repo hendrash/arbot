@@ -1,5 +1,5 @@
 import { ethers } from "hardhat";
-import { Invoke } from "./invoke/invoke";
+import { InvokeBuy } from "./invoke/invokeBuy";
 import { ExchangesTokensTypes } from "./models/tokenModels";
 
 
@@ -12,7 +12,7 @@ async function main() {
   // If we had constructor arguments, they would be passed into deploy()
   let contract = await factory.deploy();
 
-  let service= new Invoke()
+  let service= new InvokeBuy()
 
 
   // The address the Contract WILL have once mined
@@ -22,7 +22,7 @@ async function main() {
   console.log(contract.deployTransaction.hash);
  
   console.log("printing....")
-  await service.checkArb(ExchangesTokensTypes.WETH,ExchangesTokensTypes.DAI,1000)
+  await service.searchForBuy(ExchangesTokensTypes.WETH,ExchangesTokensTypes.DAI,1000)
 
   // The contract is NOT deployed yet; we must wait until it is mined
   await contract.deployed();

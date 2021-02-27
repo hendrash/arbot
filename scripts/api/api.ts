@@ -1,10 +1,11 @@
 import { ExchangesTokensTypes, ExchangeTokenList } from "../models/tokenModels"
-import { ToWei } from "../utils"
+import { ToWei } from "../util/utils"
 import {web3} from "hardhat"
 
-import { ParaSwap } from "paraswap";
+import {  APIError, OptimalRatesWithPartnerFees, ParaSwap } from "paraswap";
 // const { web3, ethers } = require("hardhat");
 import { DexAg } from "./providers"
+import { type } from "os";
 const DEXAG = require('dexag-sdk');
 
 export class Api{
@@ -12,7 +13,7 @@ export class Api{
     readonly paraswap = new ParaSwap();
     constructor(){
         
-        const dexAg= DEXAG.default.fromProvider(web3.currentProvider)
+      
             web3.eth.accounts.wallet.add(process.env.PRIVATE_KEY as string)
     }
     async getDexAg(inputTokenSymbol: ExchangesTokensTypes,outputTokenSymbol:ExchangesTokensTypes, inputAmount: number){
@@ -24,7 +25,13 @@ export class Api{
         })
         
     }
-    async getParaSwap(inputTokenSymbol: ExchangesTokensTypes, outputTokenSymbol: ExchangesTokensTypes, inputAmount: number) {
-       return await this.paraswap.getRate(inputTokenSymbol, outputTokenSymbol, inputAmount+"");
+    async getParaSwap(inputTokenSymbol: ExchangesTokensTypes, outputTokenSymbol: ExchangesTokensTypes, inputAmount: number):Promise<OptimalRatesWithPartnerFees> {
+       const paraswap = await this.paraswap.getRate(inputTokenSymbol, outputTokenSymbol, inputAmount+"");
+       if(paraswap as OptimalRatesWithPartnerFees ){
+        return paraswap as OptimalRatesWithPartnerFees;   
+       } 
+       throw (paraswap as APIError).message;
+        
+       
     }
 }
