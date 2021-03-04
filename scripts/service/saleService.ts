@@ -6,8 +6,8 @@ export class SaleService{
     
     async paraSwapCheckProfit(tokenSymbols: TokenSymbols){
         const paraswap = await this.api.getParaSwap(tokenSymbols)
-        console.log("Sell Dia")
-        console.log(paraswap)
+        // console.log("Sell Dia")
+        // console.log(paraswap)
         return paraswap;
     }
 }

@@ -1,11 +1,10 @@
-import { ExchangesTokensTypes, ExchangeTokenList, TokenSymbols } from "../models/tokenModels"
-import { ToWei } from "../util/utils"
-import {web3} from "hardhat"
-
-import {  APIError, OptimalRatesWithPartnerFees, ParaSwap } from "paraswap";
+import { web3 } from "hardhat";
+import { APIError, OptimalRatesWithPartnerFees, ParaSwap } from "paraswap";
+import { TokenSymbols } from "../models/tokenModels";
+import { ToWei } from "../util/utils";
 // const { web3, ethers } = require("hardhat");
-import { DexAg } from "./providers"
-import { type } from "os";
+import { DexAg } from "./providers";
+
 const DEXAG = require('dexag-sdk');
 
 export class Api{
@@ -26,7 +25,8 @@ export class Api{
         
     }
     async getParaSwap(tokenSymbol:TokenSymbols):Promise<OptimalRatesWithPartnerFees> {
-       const paraswap = await this.paraswap.getRate(tokenSymbol.inputTokenSymbol, tokenSymbol.outputTokenSymbol, tokenSymbol.inputAmount+"");
+        
+       const paraswap = await this.paraswap.getRate(tokenSymbol.inputTokenSymbol, tokenSymbol.outputTokenSymbol, ToWei(tokenSymbol.inputAmount+"",tokenSymbol.inputTokenSymbol)+"");
        if(paraswap as OptimalRatesWithPartnerFees ){
         return paraswap as OptimalRatesWithPartnerFees;   
        } 
@@ -34,4 +34,5 @@ export class Api{
         
        
     }
+
 }
