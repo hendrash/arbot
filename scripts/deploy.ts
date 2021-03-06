@@ -32,9 +32,11 @@ async function main() {
   // The contract is NOT deployed yet; we must wait until it is mined
   
   // await dh.printExchangesAtDifferentPrices()
+  
   // await dh.printOutOneExchange()
   
-  await dh.showDifferentExchangeRates()
+  // await dh.showDifferentExchangeRates()
+  await dh.arithmaticApproximation()
 }
 
 main()

@@ -43,5 +43,5 @@ export const TEST_CCONTRACT = "TradingBot"
 export type TokenSymbols={
     inputTokenSymbol: ExchangesTokensTypes,
     outputTokenSymbol: ExchangesTokensTypes,
-    inputAmount: number | string
+    inputAmount: number 
 }
