@@ -35,8 +35,12 @@ async function main() {
   
   // await dh.printOutOneExchange()
   
-  // await dh.showDifferentExchangeRates()
-  await dh.arithmaticApproximation()
+  // await dh.showSingleExchangeRate();
+  // console.log("finshed")
+  // await dh.showSingleExchangeRateDiaToWeth();
+  // console.log("finshed")
+  await dh.actualApproximation()
+// await dh.findMaxTrade();
 }
 
 main()

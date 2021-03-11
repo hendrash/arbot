@@ -64,30 +64,26 @@ export class InvokeBuy{
     }
     async showDifferentPrices(inputTokenSymbol: ExchangesTokensTypes, outputTokenSymbol: ExchangesTokensTypes, inputAmounts: number[]){
       return await Promise.all(inputAmounts.map(inputAmount=>this.service.getParaSwap({inputTokenSymbol, outputTokenSymbol, inputAmount}))).then(t=>{
-        // t.forEach(t=>console.log(t.log));
-        t.filter(t=>t&&t.srcAmt).map(t=>t.srcAmt+","+t.exchangeRate).forEach(j=>{
+        t.filter(t=>t&&t.srcAmt).map(t=>t.srcAmt+","+t.desAmt).forEach(j=>{
           console.log(j)
         })
-        
-
-      //   let model=new Sequential({layers:[
-      //     layers.dense({units:123,inputShape:[2],activation: 'relu'}),
-      //     layers.dense({units:1})  
-      //   ]})
-      //   let ao=new AdamOptimizer(0.01,0.9,0.999,100)
-      //    model.compile({optimizer:"opt", loss:"mse"})
-      //    let ex:number[]=t.map(t => t.exchangeRate)
-      //    let srcInput:number[]=t.map(t => t.srcAmt)
-      //  let tensor1= new Tensor(ex,"complex64",{},1)
-      //  let tensor2 = new Tensor(srcInput, "complex64",{},2) 
-      //    model.fit(tensor1,tensor2)
-    
     })
     }
     async arithmaticApproximation(tokenSymbol: TokenSymbols[]){
-      return await Promise.all(tokenSymbol.map(async t=>{await this.service.actualApproximation(t)})).then(r=>{
+      return await Promise.all(tokenSymbol.map(async t=>{await this.service.arithmaticApproximation(t)})).then(r=>{
 
       })
-       
+    }
+    async actualApproximation(tokenSymbol: TokenSymbols[]){
+      return await Promise.all(tokenSymbol.map(async t=>{await this.service.actualApproximation(t)})).then(r=>{
+      })
+    }
+    async findTradMax(tokenSymbol: TokenSymbols){
+      return await Promise.all(tokenSymbol.inputAmounts!.map(async l=>await this.service.findMaxTrade(tokenSymbol,l))).then(r=>{
+        console.log(r)
+        r.forEach(t=>{
+          console.log(t)
+        })
+      })
     }
 }

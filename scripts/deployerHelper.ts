@@ -1,6 +1,6 @@
 import { AdamOptimizer, layers, Sequential } from "@tensorflow/tfjs";
 import { InvokeBuy } from "./invoke/invokeBuy";
-import { ExchangesTokensTypes, ExchangeTokenList } from "./models/tokenModels";
+import { ExchangesTokensTypes, ExchangeTokenList, TokenSymbols } from "./models/tokenModels";
 
 // require('@tensorflow/tfjs-node'); 
 export class DeployerHelper{
@@ -29,21 +29,45 @@ export class DeployerHelper{
       return await this.service.printExchangesAtDifferentPrices(ExchangesTokensTypes.DAI,ExchangesTokensTypes.WETH, exList);
     }
 
-    async showDifferentExchangeRates(){
+    async showSingleExchangeRate(){
       let exList=[]
-      for(let i=1;i<10;i++){
+      for(let i=1;i<101;i++){
         exList.push(i)
       }
         return await this.service.showDifferentPrices(ExchangesTokensTypes.WETH,ExchangesTokensTypes.DAI, exList);
     }
-    async arithmaticApproximation(){
+    async showSingleExchangeRateDiaToWeth(){
+      let exList=[]
+      for(let i=1;i<101;i++){
+        exList.push(i)
+      }
+        return await this.service.showDifferentPrices(ExchangesTokensTypes.DAI,ExchangesTokensTypes.WETH, exList);
+    }
+
+    /*
+    Actual Approximation converts one currency to another using paraswap
+    */
+    async actualApproximation(){
       let numList: any[]=[]
-      for(let i=20;i<40;i++){
+      for(let i=1;i<101;i++){
         numList.push({inputTokenSymbol:ExchangesTokensTypes.DAI,outputTokenSymbol: ExchangesTokensTypes.WETH,inputAmount:
-          (114*i)})
+          (i)})
       }
       
-      await this.service.arithmaticApproximation(numList)      
+      await this.service.actualApproximation(numList)      
+    }
+    async findMaxTrade(){
+    await this.iterateThroughList({inputTokenSymbol: ExchangesTokensTypes.DAI, outputTokenSymbol:ExchangesTokensTypes.WETH},async (ts)=>{
+     await this.service.findTradMax(ts);
+    })
+    }
+    async iterateThroughList(tokenSymbol: TokenSymbols,iterate: (ts: TokenSymbols)=>any){
+      tokenSymbol.inputAmounts=[];
+      for(let i=0;i<2;i++){
+        tokenSymbol.inputAmounts.push(i);
+      }
+      return await iterate(tokenSymbol);
+
     }   
 }
 // await service.searchForBuy(ExchangesTokensTypes.USDC,ExchangesTokensTypes.DAI,10000)
