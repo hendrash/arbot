@@ -1,7 +1,4 @@
-import { ethers } from "hardhat";
 import { DeployerHelper } from "./deployerHelper";
-import { InvokeBuy } from "./invoke/invokeBuy";
-import { ExchangesTokensTypes, ExchangeTokenList } from "./models/tokenModels";
 
 
 
@@ -39,7 +36,7 @@ async function main() {
   // console.log("finshed")
   // await dh.showSingleExchangeRateDiaToWeth();
   // console.log("finshed")
-  await dh.actualApproximation()
+  await dh.maxTrade()
 // await dh.findMaxTrade();
 }
 

@@ -1,45 +1,45 @@
 
 import { Api } from "../api/api";
 import { ErrorMessage, ExchangeRates } from "../models/exchange-rates";
-import { ExchangesTokensTypes, TokenSymbols } from "../models/tokenModels";
+import { TokenTypes, TokenSymbols, Inverse } from "../models/tokenModels";
 import { BuyService } from "../service/buyService";
 
 export class InvokeBuy{
     service= new BuyService();
     api= new Api();
 
-    async searchForBuy(inputTokenSymbol: ExchangesTokensTypes, outputTokenSymbol:ExchangesTokensTypes, inputAmount: number){
+    async searchForBuy(toToken: TokenTypes, fromToken:TokenTypes, inputAmount: number){
     //WEB3 CONFIG
   await Promise.all([
-    this.service.getDexAg({inputTokenSymbol, outputTokenSymbol,inputAmount}), 
-    // this.service.getParaSwap({inputTokenSymbol, outputTokenSymbol, inputAmount})
+    this.service.getDexAg({toToken, fromToken,inputAmount}), 
+    // this.service.getParaSwap({toToken, fromToken, inputAmount})
   ])
     }
-    async printOutExchanges(inputTokenSymbol:ExchangesTokensTypes, outputTokenSymbolList: ExchangesTokensTypes[], inputAmount: number){
+    async printOutExchanges(toToken:TokenTypes, fromTokenList: TokenTypes[], inputAmount: number){
       return await Promise.all<ExchangeRates>([...
-        outputTokenSymbolList.map(async outputTokenSymbol=>
-        await this.service.getParaSwap({inputTokenSymbol,outputTokenSymbol, inputAmount})),
-        ...outputTokenSymbolList.map(async outputTokenSymbol=>
-          await this.service.getParaSwap({inputTokenSymbol:outputTokenSymbol,outputTokenSymbol:inputTokenSymbol, inputAmount}))],
+        fromTokenList.map(async fromToken=>
+        await this.service.getParaSwap({toToken,fromToken, inputAmount})),
+        ...fromTokenList.map(async fromToken=>
+          await this.service.getParaSwap({toToken:fromToken,fromToken:toToken, inputAmount}))],
         ).then((item:ExchangeRates[]|any|ErrorMessage)=>{
         if(item?.forEach){
-          item?.filter((u:ExchangeRates)=>u&&(u.tokens.inputTokenSymbol!=="USDT"&&u.tokens.inputTokenSymbol!=="USDC")).forEach((t:ExchangeRates)=>{
+          item?.filter((u:ExchangeRates)=>u&&(u.tokens.toToken!=="USDT"&&u.tokens.toToken!=="USDC")).forEach((t:ExchangeRates)=>{
             console.log(t?.log)
           })
         }
           return item;
       })
     }
-    async printExchangesAtDifferentPrices(inputTokenSymbol: ExchangesTokensTypes,outputTokenSymbol: ExchangesTokensTypes,inputAmounts: number[]){
+    async printExchangesAtDifferentPrices(toToken: TokenTypes,fromToken: TokenTypes,inputAmounts: number[]){
       let flip:boolean=false;
 
       return await Promise.all<ExchangeRates>(inputAmounts.map(async inputAmount=>{
         flip=!flip;
         if(flip){
-          return await this.service.getParaSwap({inputTokenSymbol,outputTokenSymbol,inputAmount})
+          return await this.service.getParaSwap({toToken,fromToken,inputAmount})
       }
         else{
-          return await this.service.getParaSwap({inputTokenSymbol:outputTokenSymbol,outputTokenSymbol:inputTokenSymbol,inputAmount})
+          return await this.service.getParaSwap({toToken:fromToken,fromToken:toToken,inputAmount})
         }
         })).then((item: ExchangeRates[])=>{
           // if(item?.forEach){
@@ -57,13 +57,13 @@ export class InvokeBuy{
           }
         })
     }
-    async printOutOneExchange(inputTokenSymbol: ExchangesTokensTypes, outputTokenSymbol: ExchangesTokensTypes, inputAmount: number){
-      return await this.service.getParaSwap({inputTokenSymbol, outputTokenSymbol, inputAmount}).then((item)=>{
+    async printOutOneExchange(toToken: TokenTypes, fromToken: TokenTypes, inputAmount: number){
+      return await this.service.getParaSwap({toToken, fromToken, inputAmount}).then((item)=>{
         console.log(item.log)
       })
     }
-    async showDifferentPrices(inputTokenSymbol: ExchangesTokensTypes, outputTokenSymbol: ExchangesTokensTypes, inputAmounts: number[]){
-      return await Promise.all(inputAmounts.map(inputAmount=>this.service.getParaSwap({inputTokenSymbol, outputTokenSymbol, inputAmount}))).then(t=>{
+    async showDifferentPrices(toToken: TokenTypes, fromToken: TokenTypes, inputAmounts: number[],inverse?:Inverse){
+      return await Promise.all(inputAmounts.map(inputAmount=>this.service.getParaSwap({toToken, fromToken, inputAmount,inverse}))).then(t=>{
         t.filter(t=>t&&t.srcAmt).map(t=>t.srcAmt+","+t.desAmt).forEach(j=>{
           console.log(j)
         })
@@ -85,5 +85,14 @@ export class InvokeBuy{
           console.log(t)
         })
       })
+    }
+    async maxTrade(tokenSymbol: TokenSymbols){
+    return await Promise.all(tokenSymbol.inputAmounts!.map(async l=> {
+      tokenSymbol.inputAmount=l;
+      return await this.service.maxTrade(tokenSymbol)})
+    ).then(t=>{
+      let newList=t.filter(t=>t)
+
+      console.log("Most profitable"+newList[newList.length-1])})
     }
 }
